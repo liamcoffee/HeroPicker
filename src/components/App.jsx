@@ -1,29 +1,35 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-import RadiantList from "./RadiantList";
+import HeroList from "./HeroList";
 import ChosenRadient from "./ChosenRadiant";
+import ChosenDire from "./ChosenDire";
 
 class App extends React.Component {
-  state = { radiantHeroes: [], selectedRadiant: [] };
+  state = {
+    radiantHeroes: [],
+    selectedRadiant: [],
+    selectedDire: [],
+    direHeroes: []
+  };
 
   componentDidMount() {
-    this.getRadiant();
+    this.getHeroes();
   }
 
-  getRadiant = () => {
+  getHeroes = () => {
     axios
       .get("./data.json")
       .then(res => {
         const initialList = res.data;
-        this.setState({ radiantHeroes: res.data });
+        this.setState({ radiantHeroes: res.data, direHeroes: res.data });
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  onHeroSelect = hero => {
+  onHeroSelect = (hero, team) => {
     this.setState(
       { selectedRadiant: this.state.selectedRadiant.concat(hero) },
       () => this.filterChosenRadiant()
@@ -46,6 +52,10 @@ class App extends React.Component {
     });
   };
 
+  testfunction = () => {
+    console.log("this works");
+  };
+
   //   filtering the hero selector to not include already chosen heroes.
   filterChosenRadiant = () => {
     let filtered = [];
@@ -64,19 +74,31 @@ class App extends React.Component {
       <div className="ui grid">
         <div className="ui row">
           <div className="four wide column">
-            <RadiantList
+            <HeroList
               onHeroSelect={this.onHeroSelect}
               heroes={this.state.radiantHeroes}
             />
           </div>
-          <div className="five wide column">
-            Radiant:
+          <div className="four wide column">
+            <h1>Radiant:</h1>
             <ChosenRadient
               onHeroSelect={this.removeRadiantHero}
               chosenHeroes={this.state.selectedRadiant}
             />
           </div>
-          <div className="four wide column" />
+          <div className="four wide column">
+            <h1>Dire:</h1>
+            <ChosenDire
+              onHeroSelect={this.removeRadiantHero}
+              chosenHeroes={this.state.selectedDire}
+            />
+          </div>
+          <div className="four wide column">
+            <HeroList
+              onHeroSelect={this.testfunction}
+              heroes={this.state.direHeroes}
+            />
+          </div>
         </div>
       </div>
     );
