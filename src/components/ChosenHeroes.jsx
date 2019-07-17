@@ -1,18 +1,19 @@
 import React from "react";
 import HeroItem from "./HeroItem";
 
-const ChosenRadiant = ({ chosenHeroes, onHeroSelect }) => {
-  const renderedChosenRadiant = chosenHeroes.map(selectedRadiant => {
+const ChosenHeroes = ({ chosenHeroes, onHeroSelect, team }) => {
+  const renderedChosenHeroes = chosenHeroes.map(selectedRadiant => {
     return (
       <HeroItem
         key={selectedRadiant.ID}
         hero={selectedRadiant}
         selectedRadiant={selectedRadiant}
         onHeroSelect={onHeroSelect}
+        team={team}
       />
     );
   });
-  return <div>{renderedChosenRadiant}</div>;
+  return <div>{renderedChosenHeroes}</div>;
 };
 
-export default ChosenRadiant;
+export default ChosenHeroes;
