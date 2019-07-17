@@ -3,14 +3,23 @@ import ReactDOM from "react-dom";
 import axios from "axios";
 import HeroList from "./HeroList";
 import ChosenHeroes from "./ChosenHeroes";
-import ChosenDire from "./ChosenDire";
 
 class App extends React.Component {
   state = {
     radiantHeroes: [],
     selectedRadiant: [],
     selectedDire: [],
-    direHeroes: []
+    direHeroes: [],
+    totalRadiant: [
+      {
+        save: 0,
+        lane: 0,
+        objective: 0,
+        Initiator: 0,
+        wave: 0,
+        teamfight: 0
+      }
+    ]
   };
 
   componentDidMount() {
@@ -30,14 +39,23 @@ class App extends React.Component {
   };
 
   onHeroSelect = (hero, team) => {
-    console.log("the team is", team);
     if (team === "radiant") {
       this.setState(
-        { selectedRadiant: this.state.selectedRadiant.concat(hero) },
+        {
+          selectedRadiant: this.state.selectedRadiant.concat(hero),
+          totalRadiant: {
+            save: hero["Wave Clear"],
+            lane: hero["Lane Winning"],
+            objective: 0,
+            Initiator: 0,
+            wave: 0,
+            teamfight: 0
+          }
+        },
         () => this.filterChosenRadiant()
       );
+      console.log(this.state.totalRadiant);
     } else {
-      console.log("the else is checked");
       this.setState(
         { selectedDire: this.state.selectedDire.concat(hero) },
         () => this.filterChosenDire()
@@ -46,8 +64,6 @@ class App extends React.Component {
   };
 
   removeHero = (hero, team) => {
-    console.log("REMOVING THE TEAM IS " + team);
-
     if (team === "radiant") {
       // removing from chosen array
       let filteredArray = this.state.selectedRadiant.filter(
@@ -86,8 +102,6 @@ class App extends React.Component {
       val => !this.state.selectedRadiant.includes(val)
     );
     this.setState({ radiantHeroes: filteredRadient });
-    console.log("chosen", this.state.selectedRadiant);
-    console.log("filtered", filteredRadient);
   };
 
   filterChosenDire = () => {
@@ -98,8 +112,6 @@ class App extends React.Component {
       val => !this.state.selectedDire.includes(val)
     );
     this.setState({ direHeroes: filteredDire });
-    console.log("chosen", this.state.selectedDire);
-    console.log("filtered", filteredDire);
   };
 
   render() {
