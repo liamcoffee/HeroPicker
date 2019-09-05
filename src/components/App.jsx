@@ -12,18 +12,7 @@ class App extends React.Component {
 			radiantHeroes: [],
 			selectedRadiant: [],
 			selectedDire: [],
-			direHeroes: [],
-			totalRadiant: [
-				{
-					teamfight: 0,
-					waveclear: 0,
-					initiator: 0,
-					objective: 0,
-					lane: 0,
-					flex: 0,
-					save: 0
-				}
-			]
+			direHeroes: []
 		};
 	}
 
@@ -44,25 +33,13 @@ class App extends React.Component {
 	};
 
 	onHeroSelect = (hero, team) => {
-		let newval = this.state.totalRadiant.teamfight || 0;
-		console.log("Newval", newval);
 		if (team === "radiant") {
 			this.setState(
 				{
-					selectedRadiant: this.state.selectedRadiant.concat(hero),
-					totalRadiant: {
-						teamfight: hero["Team Fight"] + newval,
-						waveclear: hero["Wave Clear"],
-						initiator: hero["Initiator"],
-						objective: hero["Objective Taker"],
-						lane: hero["Lane Winning"],
-						flex: hero["Flexible Role"],
-						save: hero["Save Empower"]
-					}
+					selectedRadiant: this.state.selectedRadiant.concat(hero)
 				},
 				() => {
 					this.filterChosenRadiant();
-					console.log("teamfight", this.state.totalRadiant.teamfight);
 				}
 			);
 		} else {
@@ -143,7 +120,10 @@ class App extends React.Component {
 							team="radiant"
 						/>
 						<h2>TOTALS</h2>
-						<Totals totalRadiant={this.state.totalRadiant} />
+						<Totals
+							totalRadiant={this.state.selectedRadiant}
+							totalDire={this.state.selectedDire}
+						/>
 					</div>
 					<div className="four wide column">
 						<h1>Dire:</h1>
